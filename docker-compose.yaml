@@ -1,0 +1,15 @@
+services:
+  wordle:
+    image: nginxinc/nginx-unprivileged:alpine-slim
+    volumes:
+      - ./wordle.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - "proxy"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.wordle.rule: "Host(`${WORDLE_HOSTNAME}`)"
+      traefik.http.routers.wordle.entrypoints: "websecure"
+      traefik.http.routers.wordle.tls.certresolver: "letsencrypt"
+networks:
+  proxy:
+    external: true
